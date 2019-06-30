@@ -26,4 +26,11 @@ export class AppComponent  {
     this.service.setLanguage(this.languages[this.nextLanguage++]);
     if (this.nextLanguage >= this.languages.length) this.nextLanguage = 0;
   }
+
+  private readonly commonStyles = ['common 1', 'common 2', 'common 3'];
+  private nextCommonStyles = 0;
+  setCommonStyles() {
+    this.service.setCommonStyles(this.commonStyles[this.nextCommonStyles++]);
+    if (this.nextCommonStyles >= this.commonStyles.length) this.nextCommonStyles = 0;
+  }
 }

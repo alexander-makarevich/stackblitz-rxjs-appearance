@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
-import {Subject, Observable, of, combineLatest} from 'rxjs'; 
-import {switchMap, map} from 'rxjs/operators';
+import {Subject, ReplaySubject, Observable, of, combineLatest} from 'rxjs'; 
+import {switchMap, map, first} from 'rxjs/operators';
 
 type Params = any;
 type CommonStyles = any;
@@ -20,14 +20,15 @@ export class RomanService {
     this.pageSource.next(page);
   }
 
-  // private commonStylesSource = new Subject();
-  // private commonStyles$ = this.commonStylesSource.asObservable();
-  getCommonStyles(): Observable<CommonStyles> {
-    return of({common: 'common'});
+  private commonStylesSource = new ReplaySubject<CommonStyles>();
+  private commonStyles$ = this.commonStylesSource.asObservable();
+  setCommonStyles(style: string) {
+    this.commonStylesSource.next({common: style});
   }
 
+  //TODO: use delayWhen instead of first().
   public params$ = combineLatest(this.language$, this.page$).pipe(
-    switchMap(([language, page]) => combineLatest(this.getCommonStyles(), this.getParams(language, page))),
+    switchMap(([language, page]) => combineLatest(this.commonStyles$.pipe(first()), this.getParams(language, page))),
     map(([commonStyles, params]) => ({...params, ...commonStyles}))
   );
 
