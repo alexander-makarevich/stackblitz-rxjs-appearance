@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Subject, Observable, of} from 'rxjs'; 
+
+import {Subject, Observable, of, combineLatest} from 'rxjs'; 
 
 type Params = any;
 
@@ -18,6 +19,8 @@ export class RomanService {
   setPage(page: string) {
     this.pageSource.next(page);
   }
+
+  public params$ = combineLatest(this.language$, this.page$);
 
   getParams(language: string, page: string): Observable<Params> {
     return of({language: language, page: page});

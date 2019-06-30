@@ -9,5 +9,21 @@ import {RomanService} from './roman.service';
   providers: [RomanService],
 })
 export class AppComponent  {
-  name = 'Angular';
+  constructor(public service: RomanService) {
+    service.params$.subscribe(p => console.log(p));
+  }
+
+  private readonly pages = ['page 1', 'page 2', 'page 3'];
+  private nextPage = 0;
+  setPage() {
+    this.service.setPage(this.pages[this.nextPage++]);
+    if (this.nextPage >= this.pages.length) this.nextPage = 0;
+  }
+
+  private readonly languages = ['ru', 'en', 'it'];
+  private nextLanguage = 0;
+  setLanguage() {
+    this.service.setLanguage(this.languages[this.nextLanguage++]);
+    if (this.nextLanguage >= this.languages.length) this.nextLanguage = 0;
+  }
 }
