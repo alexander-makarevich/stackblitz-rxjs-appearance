@@ -11,6 +11,7 @@ import {RomanService} from './roman.service';
 export class AppComponent  {
   constructor(public service: RomanService) {
     service.params$.subscribe(p => console.log(p));
+    service.delayedStyles$.subscribe(s => console.log(s));
   }
 
   private readonly pages = ['page 1', 'page 2', 'page 3'];
